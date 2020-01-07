@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Parent View</h2>
+
+<table>
+    <tr>
+        <td align="right" style="font-weight:bold">id:</td>
+        <td>{{parent.id}}</td>
+    </tr>
+    <tr>
+        <td align="right" style="font-weight:bold">name:</td>
+        <td>{{parent.name}}</td>
+    </tr>
+    <tr>
+        <td align="right" style="font-weight:bold">Email:</td>
+        <td>{{parent.email}}</td>
+    </tr>
+    <tr>
+        <td align="right" style="font-weight:bold">sex:</td>
+        <td>{{parent.sex}}</td>
+    </tr>
+    <tr>
+        <td align="right" style="font-weight:bold">DOB:</td>
+        <td>{{parent.dob}}</td>
+    </tr>
+    <tr>
+        <td align="right" style="font-weight:bold">tobacco user:</td>
+        <td>{{parent.is_tobacco_user}}</td>
+    </tr>
+    <tr>
+        <td align="right" style="font-weight:bold">Income Amount:</td>
+        <td>{{parent.income_amount}}</td>
+    </tr>
+</table>
+<hr>
+<td><a href="{{ url_for('parents') }}">parents</a></td>
+
+{% endblock %}

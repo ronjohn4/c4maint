@@ -1,0 +1,41 @@
+<!doctype html>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - c4h</title>
+        {% else %}
+        <title>c4h</title>
+        {% endif %}
+
+        <script type="text/javascript">
+            function submitEditform()
+            {
+                document.EditForm.submit();
+                return false;
+            }
+        </script>
+        <script type="text/javascript">
+            function submitAddform()
+            {
+                document.AddForm.submit();
+                return false;
+            }
+        </script>
+    </head>
+    <body>
+        <div style="text-align:left;">
+            <a href="{{ url_for('index') }}" style="text-decoration: none; font-size:32px;">c4h</a>
+        </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
