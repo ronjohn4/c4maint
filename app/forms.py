@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
     TextAreaField, HiddenField, DateField, DecimalField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 import dateutil.parser
+from app.models import sex
 
 
 def validate_dob(form, field):
@@ -66,11 +67,12 @@ class ResetPasswordForm(FlaskForm):
 
 
 class ParentForm(FlaskForm):
-    id = HiddenField('id:', validators=[DataRequired()])
+    id = HiddenField('id:')
     name = StringField('Name:', validators=[DataRequired()])
     email = StringField('Email:', validators=[DataRequired(), Email()])
     # https://en.wikipedia.org/wiki/ISO/IEC_5218
-    sex = SelectField('Sex', choices=[('0', 'Not known'), ('1', 'male'), ('2', 'female'), ('9', 'Not Applicable')])
+    # pattern for converting a dictionary to choices
+    sex = SelectField('Sex', choices=[(str(k), v) for k, v in sorted(sex.items())])
     dob = StringField('DOB:', validators=[validate_dob])
     is_tobacco_user = BooleanField('Tobacco User:')
     income_amount = DecimalField('Income Amount:', places=2)

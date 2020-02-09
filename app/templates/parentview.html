@@ -18,11 +18,11 @@
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">sex:</td>
-        <td>{{parent.sex}}</td>
+        <td>{{sex[parent.sex]}}</td>
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">DOB:</td>
-        <td>{{parent.dob}}</td>
+        <td>{{parent.dob.strftime('%m-%d-%Y')}}</td>
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">tobacco user:</td>
@@ -30,10 +30,10 @@
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">Income Amount:</td>
-        <td>{{parent.income_amount}}</td>
+        <td>{{"${:,.2f}".format(parent.income_amount|float)}}</td>
     </tr>
 </table>
 <hr>
-<td><a href="{{ url_for('parents') }}">parents</a></td>
+<td><a href="{{ url_for('parents') }}">cancel</a></td>
 
 {% endblock %}

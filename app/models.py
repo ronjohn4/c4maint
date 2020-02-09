@@ -15,7 +15,7 @@ class Account(db.Model):
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
     email = db.Column(db.String(120))
-    sex = db.Column(db.Integer)     # https://en.wikipedia.org/wiki/ISO/IEC_5218
+    sex = db.Column(db.Integer)  # https://en.wikipedia.org/wiki/ISO/IEC_5218
     dob = db.Column(db.Date)
     is_tobacco_user = db.Column(db.Boolean)
     zip = db.Column(db.String(10))
@@ -81,11 +81,17 @@ class DrPreferences(db.Model):
         return '<DrPreferences {}>'.format(self.last_name)
 
 
+sex = {0: 'not known',
+       1: 'male',
+       2: 'female',
+       9: 'not applicable'}
+
+
 class Parent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     email = db.Column(db.String(120))
-    sex = db.Column(db.Integer)     # https://en.wikipedia.org/wiki/ISO/IEC_5218
+    sex = db.Column(db.Integer)  # https://en.wikipedia.org/wiki/ISO/IEC_5218
     dob = db.Column(db.Date)
     is_tobacco_user = db.Column(db.Boolean)
     income_amount = db.Column(db.Numeric)
