@@ -6,7 +6,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess2'
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -22,4 +22,4 @@ class Config(object):
     # MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
     # ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
     # REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
-    # POSTS_PER_PAGE = 25
+    ROWS_PER_PAGE = 25
