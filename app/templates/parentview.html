@@ -34,6 +34,6 @@
     </tr>
 </table>
 <hr>
-<td><a href="{{ url_for('parents') }}">cancel</a></td>
+<td><a href="{{ url_for('parents') }}">cancel</a></td> | <a href="{{ url_for('parentedit', id=parent.id) }}">edit</a>
 
 {% endblock %}
