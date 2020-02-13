@@ -1,10 +1,13 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
+from app import db
 from app.models import Parent
 from app.forms import ParentForm
 from datetime import datetime
 import dateutil.parser
 from app.models import sex
+
+lastpage = 0
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -15,8 +18,14 @@ def index():
 
 @app.route('/parents')
 def parents():
-    data = Parent.query.all()
-    return render_template('parentlist.html', parents=data, sex=sex)
+    global lastpage
+    page = request.args.get('page', lastpage, type=int)
+    lastpage = page
+    data = Parent.query.paginate(page, app.config['ROWS_PER_PAGE'], False)
+    next_url = url_for('parents', page=data.next_num) if data.has_next else None
+    prev_url = url_for('parents', page=data.prev_num) if data.has_prev else None
+    return render_template('parentlist.html', parents=data.items, sex=sex,
+                           next_url=next_url, prev_url=prev_url)
 
 
 # todo - show child list for selected parent
@@ -27,13 +36,9 @@ def parentview(id):
 
 
 @app.route('/parentadd2', methods=["GET", "POST"])
-def parentadd2():
-    print('parentadd')
+def parentadd():
     form = ParentForm()
-    print(request.method)
-
     if request.method == 'POST' and form.validate_on_submit():
-        print('ParentAdd Validated')
         var = Parent(name=request.form['name'],
                      email=request.form['email'],
                      sex=int(request.form['sex']),
@@ -46,8 +51,7 @@ def parentadd2():
         return redirect('/parents')
 
     if request.method == 'GET':
-        print('ParentAdd GET')
-        # form.validate()
+        pass
     return render_template('parentadd.html', form=form)
 
 
@@ -69,3 +73,20 @@ def parentedit(id):
         data = Parent.query.filter_by(id=id).first_or_404()
         form.load(data)
     return render_template('parentedit.html', form=form)
+
+
+# Use to add test data to parent table.  ?addcount=30 adds 30 entries
+@app.route('/parentaddtest', methods=["GET", "POST"])
+def parentaddtest():
+    addcount = request.args.get('addcount', 20, type=int)
+    for addone in range(addcount):
+        var = Parent(name=f'name{addone}',
+                     email='email@domain.com',
+                     sex=0,
+                     dob=datetime.strptime('1999-01-01', '%Y-%m-%d'),
+                     is_tobacco_user=0,
+                     income_amount=123.45
+                     )
+        db.session.add(var)
+        db.session.commit()
+    return redirect('/parents')

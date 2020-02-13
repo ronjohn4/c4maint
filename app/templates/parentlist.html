@@ -25,11 +25,24 @@
         <td>{{sex[parent.sex]}}</td>
         <td>{{parent.dob.strftime('%m-%d-%Y')}}</td>
         <td>{{parent.is_tobacco_user}}</td>
-        <td>{{ "${:,.2f}".format(parent.income_amount|float) }}</td>
+        <td align="right">{{ "${:,.2f}".format(parent.income_amount|float) }}</td>
     </tr>
     {% endfor %}
 
 </table>
 <hr>
-<td><a href="{{ url_for('parentadd2') }}">add</a></td>
+<td><a href="{{ url_for('parentadd') }}">add</a></td>
+<p>
+    {% if prev_url %}
+        <a href="{{ prev_url }}">prev</a>
+    {% else %}
+        prev
+    {% endif %}
+    |
+    {% if next_url %}
+        <a href="{{ next_url }}">next</a>
+    {% else %}
+        next
+    {% endif %}
+</p>
 {% endblock %}
