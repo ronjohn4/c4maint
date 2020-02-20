@@ -35,5 +35,40 @@
 </table>
 <hr>
 <td><a href="{{ url_for('parents') }}">cancel</a></td> | <a href="{{ url_for('parentedit', id=parent.id) }}">edit</a>
-
+<hr>
+<h2>Child List</h2>
+{% if children %}
+    <table>
+        <thead>
+            <td></td>
+            <td></td>
+            <td class="underline">id</td>
+            <td class="underline">Name</td>
+        </thead>
+        {% for child in children %}
+        <tr>
+            <td><a href="{{ url_for('parentedit', id=child.id) }}">edit</a></td>
+            <td><a href="{{ url_for('parentview', id=child.id) }}">view</a></td>
+            <td>{{child.id}}</td>
+            <td>{{child.name}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <hr>
+    <p>
+        {% if prev_url %}
+            <a href="{{ prev_url }}">prev</a>
+        {% else %}
+            prev
+        {% endif %}
+        |
+        {% if next_url %}
+            <a href="{{ next_url }}">next</a>
+        {% else %}
+            next
+        {% endif %}
+    </p>
+{% else %}
+    No Children for this Parent
+{% endif %}
 {% endblock %}

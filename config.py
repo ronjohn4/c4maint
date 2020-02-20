@@ -22,5 +22,6 @@ class Config(object):
     # MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
     # ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
     # REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
-    ROWS_PER_PAGE = 20
+    ROWS_PER_PAGE_FULL = 20
+    ROWS_PER_PAGE_FILTER = 10
     TEMPLATES_AUTO_RELOAD = True
