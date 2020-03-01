@@ -13,6 +13,7 @@ migrate = Migrate()
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    # app.url_map.strict_slashes = False
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -38,5 +39,6 @@ def create_app(config_class=Config):
 
 
 app = create_app()
+
 
 from app import models, routes
