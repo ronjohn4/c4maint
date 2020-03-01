@@ -19,8 +19,8 @@
 {% block content %}
 <h2>Parent Edit - {{form.id.data}}</h2>
 
-<form name="EditForm" method="POST">
-<!--<form name="EditForm" method="POST" action="{{ url_for('parentedit', id=form.id.data) }}">-->
+<!--<form name="EditForm" method="POST">-->
+<form name="EditForm" method="POST" action="{{ url_for('parentedit', id=form.id.data|int) }}">
     {{ form.csrf_token }}{{ form.hidden_tag() }}
     <table>
         <tr>

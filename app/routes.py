@@ -9,6 +9,7 @@ from app.models import sex
 
 lastpagefull = 0
 lastpagefilter = 0
+next_page = None
 
 
 def redirect_url(default='index'):
@@ -67,6 +68,8 @@ def parentview(id):
 
 @app.route('/parentedit/<int:id>', methods=["GET", "POST"])
 def parentedit(id):
+    global next_page
+
     print(f"next={request.args.get('next')}, referrer={request.referrer}")
     form = ParentForm()
     if request.method == "POST" and form.validate_on_submit():
@@ -79,9 +82,10 @@ def parentedit(id):
         data.income_amount = request.form['income_amount']
         db.session.commit()
         # return redirect('/parents')
-        return redirect(redirect_url())
+        return redirect(next_page)
 
     if request.method == 'GET':
+        next_page = request.referrer
         data = Parent.query.filter_by(id=id).first_or_404()
         form.load(data)
     return render_template('parentedit.html', form=form, next=request.referrer)
