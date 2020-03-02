@@ -20,7 +20,7 @@
 <h2>Parent Edit - {{form.id.data}}</h2>
 
 <!--<form name="EditForm" method="POST">-->
-<form name="EditForm" method="POST" action="{{ url_for('parentedit', id=form.id.data|int) }}">
+<form name="EditForm" method="POST" action="{{ url_for('parentedit', id=form.id|int) }}">
     {{ form.csrf_token }}{{ form.hidden_tag() }}
     <table>
         <tr>
@@ -36,5 +36,5 @@
     </table>
 </form>
 <hr>
-<p><a href="javascript:submitEditform()">save</a> | <a href="{{ url_for('parents') }}">cancel</a></p>
+<p><a href="{{ url_for('parents') }}">cancel</a> | <a href="javascript:submitEditform()">save</a></p>
 {% endblock %}
