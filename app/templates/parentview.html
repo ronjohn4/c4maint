@@ -5,10 +5,6 @@
 
 <table>
     <tr>
-        <td align="right" style="font-weight:bold">id:</td>
-        <td>{{parent.id}}</td>
-    </tr>
-    <tr>
         <td align="right" style="font-weight:bold">name:</td>
         <td>{{parent.name}}</td>
     </tr>
@@ -25,8 +21,8 @@
         <td>{{parent.dob.strftime('%m-%d-%Y')}}</td>
     </tr>
     <tr>
-        <td align="right" style="font-weight:bold">tobacco user:</td>
-        <td>{{parent.is_tobacco_user}}</td>
+        <td align="right" style="font-weight:bold">active:</td>
+        <td>{{parent.is_active}}</td>
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">Income Amount:</td>
@@ -34,24 +30,31 @@
     </tr>
 </table>
 <hr>
-<td><a href="{{ url_for('parents') }}">cancel</a></td> | <a href="{{ url_for('parentedit', id=parent.id) }}">edit</a>
+<a href="{{ url_for('parents') }}">cancel</a> | <a href="{{ url_for('parentedit', id=parent.id) }}">edit</a>
+{% if not children %}
+ | <a href="{{ url_for('parentedit', id=parent.id) }}">delete</a>
+{% endif %}
 <hr>
-<h2>Child List</h2>
+<h2>Audit List</h2>
 {% if children %}
     <table>
         <thead>
             <td></td>
-            <td></td>
-            <td class="underline">id</td>
-            <td class="underline">Name</td>
+            <td class="underline">Date/Time</td>
+            <td class="underline">User</td>
+            <td class="underline">Action</td>
+            <td class="underline">Before</td>
+            <td class="underline">After</td>
         </thead>
         {% for child in children %}
-        <tr>
-            <td><a href="{{ url_for('parentedit', id=child.id) }}">edit</a></td>
-            <td><a href="{{ url_for('parentview', id=child.id) }}">view</a></td>
-            <td>{{child.id}}</td>
-            <td>{{child.name}}</td>
-        </tr>
+            <tr>
+                <td><a href="{{ url_for('parentview', id=child.id) }}">view</a></td>
+                <td>{{child.a_datetime.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+                <td>{{child.a_user}}</td>
+                <td>{{child.action}}</td>
+                <td>{{child.before|truncate(40)}}</td>
+                <td>{{child.after|truncate(40)}}</td>
+            </tr>
         {% endfor %}
     </table>
     <hr>
@@ -69,6 +72,6 @@
         {% endif %}
     </p>
 {% else %}
-    No Children for this Parent
+    No Audit for this Parent
 {% endif %}
 {% endblock %}

@@ -74,7 +74,7 @@ class ParentForm(FlaskForm):
     # pattern for converting a dictionary to choices
     sex = SelectField('Sex', choices=[(str(k), v) for k, v in sorted(sex.items())])
     dob = StringField('DOB:', validators=[validate_dob])
-    is_tobacco_user = BooleanField('Tobacco User:')
+    is_active = BooleanField('Active:')
     income_amount = DecimalField('Income Amount:', places=2)
 
     def load(self, data):
@@ -83,6 +83,6 @@ class ParentForm(FlaskForm):
         self.email.default = data.email
         self.sex.default = data.sex
         self.dob.default = data.dob
-        self.is_tobacco_user.default = data.is_tobacco_user
+        self.is_active.default = data.is_active
         self.income_amount.default = data.income_amount
         self.process()

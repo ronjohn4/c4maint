@@ -1,7 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
-from app import db
-from app.models import Parent, Child
+from app.models import Parent, ParentAudit
 from app.forms import ParentForm
 from datetime import datetime
 import dateutil.parser
@@ -12,18 +11,14 @@ lastpagefilter = 0
 next_page = None
 
 
-def redirect_url(default='index'):
-    return request.args.get('next') or \
-           request.referrer or \
-           url_for(default)
+# @app.route('/', methods=['GET', 'POST'])
+# @app.route('/index', methods=['GET', 'POST'])
+# def index():
+#     return render_template('index.html', title='Home')
 
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
-def index():
-    return render_template('index.html', title='Home')
-
-
 @app.route('/parents/')
 def parents():
     global lastpagefull
@@ -35,7 +30,7 @@ def parents():
     return render_template('parentlist.html', parents=data.items, sex=sex, next_url=next_url, prev_url=prev_url)
 
 
-@app.route('/parentadd/')
+@app.route('/parentadd/', methods=["GET", "POST"])
 def parentadd():
     form = ParentForm()
     if request.method == 'POST' and form.validate_on_submit():
@@ -44,7 +39,7 @@ def parentadd():
                      sex=int(request.form['sex']),
                      dob=datetime.strptime(str(dateutil.parser.parse(request.form['dob'])).split(" ", 1)[0],
                                            '%Y-%m-%d'),
-                     is_tobacco_user='is_tobacco_user' in request.form,
+                     is_active='is_active' in request.form,
                      income_amount=request.form['income_amount']
                      )
         db.session.add(var)
@@ -59,7 +54,7 @@ def parentview(id):
     page = request.args.get('page', lastpagefilter, type=int)
     lastpagefilter = page
     parent = Parent.query.filter_by(id=id).first_or_404()
-    children = Child.query.filter_by(parent_id=parent.id).paginate(page, app.config['ROWS_PER_PAGE_FILTER'], False)
+    children = ParentAudit.query.filter_by(parent_id=parent.id).paginate(page, app.config['ROWS_PER_PAGE_FILTER'], False)
     next_url = url_for('parentview', id=id, page=children.next_num) if children.has_next else None
     prev_url = url_for('parentview', id=id, page=children.prev_num) if children.has_prev else None
     return render_template('parentview.html', parent=parent, children=children.items,
@@ -70,18 +65,28 @@ def parentview(id):
 def parentedit(id):
     global next_page
 
-    print(f"next={request.args.get('next')}, referrer={request.referrer}")
     form = ParentForm()
     if request.method == "POST" and form.validate_on_submit():
         data = Parent.query.filter_by(id=id).first_or_404()
+        before = data.audit_format()
         data.name = request.form['name']
         data.email = request.form['email']
         data.sex = int(request.form['sex'])
         data.dob = datetime.strptime(str(dateutil.parser.parse(request.form['dob'])).split(" ", 1)[0], '%Y-%m-%d')
-        data.is_tobacco_user = 'is_tobacco_user' in request.form
+        data.is_active = 'is_active' in request.form
         data.income_amount = request.form['income_amount']
+
+        after = data.audit_format()
+        var = ParentAudit(parent_id=data.id,
+                          a_datetime=datetime.now(),
+                          a_user="Ron",
+                          action="change",
+                          before=before,
+                          after=after
+                          )
+
+        db.session.add(var)
         db.session.commit()
-        # return redirect('/parents')
         return redirect(next_page)
 
     if request.method == 'GET':
@@ -91,7 +96,8 @@ def parentedit(id):
     return render_template('parentedit.html', form=form, next=request.referrer)
 
 
-# Use to add test data to the parent table.  /parentaddtest?addcount=30 adds 30 entries
+# Use to add test data to the Parent model.
+# /parentaddtest?addcount=30 adds 30 entries
 @app.route('/parentaddtest/', methods=["GET", "POST"])
 def parentaddtest():
     addcount = request.args.get('addcount', 20, type=int)
@@ -100,23 +106,28 @@ def parentaddtest():
                      email='email@domain.com',
                      sex=0,
                      dob=datetime.strptime('1999-01-01', '%Y-%m-%d'),
-                     is_tobacco_user=0,
+                     is_active=0,
                      income_amount=123.45
                      )
         db.session.add(var)
-        db.session.commit()
+    db.session.commit()
     return redirect('/parents')
 
 
-# Use to add test data to the child table.  /childaddtest?addcount=30&parentid=3 adds 30 entries to parent 3
-@app.route('/childaddtest/', methods=["GET", "POST"])
-def childaddtest():
+# Use to add test data to the ParentAudit model.
+# /parentauditaddtest?addcount=30&parentid=3 adds 30 entries to parent 3
+@app.route('/parentauditaddtest/', methods=["GET", "POST"])
+def parentauditaddtest():
     addcount = request.args.get('addcount', 20, type=int)
     parentid = request.args.get('parentid', 1, type=int)
     for addone in range(addcount):
-        var = Child(name=f'child name{addone}',
-                    parent_id=parentid
+        var = ParentAudit(parent_id=parentid,
+                          a_datetime=datetime.now(),
+                          a_user="Ron",
+                          action="change",
+                          before="snapshot of parent before",
+                          after="snapshot of parent after"
                     )
         db.session.add(var)
-        db.session.commit()
+    db.session.commit()
     return redirect('/parents')

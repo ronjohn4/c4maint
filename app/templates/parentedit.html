@@ -17,21 +17,17 @@
 {% endmacro %}
 
 {% block content %}
-<h2>Parent Edit - {{form.id.data}}</h2>
+<h2>Parent Edit</h2>
 
 <!--<form name="EditForm" method="POST">-->
-<form name="EditForm" method="POST" action="{{ url_for('parentedit', id=form.id|int) }}">
+<form name="EditForm" method="POST" action="{{ url_for('parentedit', id=form.id.data|int) }}">
     {{ form.csrf_token }}{{ form.hidden_tag() }}
     <table>
-        <tr>
-            <td align="right" style="font-weight:bold">id:</td>
-            <td>{{form.id}}</td>
-        </tr>
         {{ with_errors(form.name) }}
         {{ with_errors(form.email) }}
         {{ with_errors(form.sex) }}
         {{ with_errors(form.dob) }}
-        {{ with_errors(form.is_tobacco_user) }}
+        {{ with_errors(form.is_active) }}
         {{ with_errors(form.income_amount) }}
     </table>
 </form>
