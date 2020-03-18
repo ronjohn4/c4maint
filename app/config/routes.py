@@ -1,36 +1,30 @@
-from flask import render_template, flash, redirect, url_for, request
-from app import app, db
+from flask import render_template, redirect, url_for, request, current_app
+from app import db
+from app.config import bp
 from app.models import Parent, ParentAudit
-from app.forms import ParentForm
+from app.main.forms import ParentForm
 from datetime import datetime
 import dateutil.parser
 from app.models import sex
+
 
 lastpagefull = 0
 lastpagefilter = 0
 next_page = None
 
 
-# @app.route('/', methods=['GET', 'POST'])
-# @app.route('/index', methods=['GET', 'POST'])
-# def index():
-#     return render_template('index.html', title='Home')
-
-
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
-@app.route('/parents/')
+@bp.route('/parents/')
 def parents():
     global lastpagefull
     page = request.args.get('page', lastpagefull, type=int)
     lastpagefull = page
-    data = Parent.query.paginate(page, app.config['ROWS_PER_PAGE_FULL'], False)
-    next_url = url_for('parents', page=data.next_num) if data.has_next else None
-    prev_url = url_for('parents', page=data.prev_num) if data.has_prev else None
+    data = Parent.query.paginate(page, current_app.config['ROWS_PER_PAGE_FULL'], False)
+    next_url = url_for('.parents', page=data.next_num) if data.has_next else None
+    prev_url = url_for('.parents', page=data.prev_num) if data.has_prev else None
     return render_template('parentlist.html', parents=data.items, sex=sex, next_url=next_url, prev_url=prev_url)
 
 
-@app.route('/parentadd/', methods=["GET", "POST"])
+@bp.route('/parentadd/', methods=["GET", "POST"])
 def parentadd():
     form = ParentForm()
     if request.method == 'POST' and form.validate_on_submit():
@@ -48,20 +42,20 @@ def parentadd():
     return render_template('parentadd.html', form=form)
 
 
-@app.route('/parentview/<int:id>', methods=["GET", "POST"])
+@bp.route('/parentview/<int:id>', methods=["GET", "POST"])
 def parentview(id):
     global lastpagefilter
     page = request.args.get('page', lastpagefilter, type=int)
     lastpagefilter = page
     parent = Parent.query.filter_by(id=id).first_or_404()
-    children = ParentAudit.query.filter_by(parent_id=parent.id).paginate(page, app.config['ROWS_PER_PAGE_FILTER'], False)
-    next_url = url_for('parentview', id=id, page=children.next_num) if children.has_next else None
-    prev_url = url_for('parentview', id=id, page=children.prev_num) if children.has_prev else None
+    children = ParentAudit.query.filter_by(parent_id=parent.id).paginate(page, current_app.config['ROWS_PER_PAGE_FILTER'], False)
+    next_url = url_for('.parentview', id=id, page=children.next_num) if children.has_next else None
+    prev_url = url_for('.parentview', id=id, page=children.prev_num) if children.has_prev else None
     return render_template('parentview.html', parent=parent, children=children.items,
                            sex=sex, next_url=next_url, prev_url=prev_url)
 
 
-@app.route('/parentedit/<int:id>', methods=["GET", "POST"])
+@bp.route('/parentedit/<int:id>', methods=["GET", "POST"])
 def parentedit(id):
     global next_page
 
@@ -98,7 +92,7 @@ def parentedit(id):
 
 # Use to add test data to the Parent model.
 # /parentaddtest?addcount=30 adds 30 entries
-@app.route('/parentaddtest/', methods=["GET", "POST"])
+@bp.route('/parentaddtest/', methods=["GET", "POST"])
 def parentaddtest():
     addcount = request.args.get('addcount', 20, type=int)
     for addone in range(addcount):
@@ -116,7 +110,7 @@ def parentaddtest():
 
 # Use to add test data to the ParentAudit model.
 # /parentauditaddtest?addcount=30&parentid=3 adds 30 entries to parent 3
-@app.route('/parentauditaddtest/', methods=["GET", "POST"])
+@bp.route('/parentauditaddtest/', methods=["GET", "POST"])
 def parentauditaddtest():
     addcount = request.args.get('addcount', 20, type=int)
     parentid = request.args.get('parentid', 1, type=int)

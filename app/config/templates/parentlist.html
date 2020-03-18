@@ -5,7 +5,6 @@
 
 <table>
     <thead>
-        <td></td>
         <td class="underline">Name</td>
         <td class="underline">email</td>
         <td class="underline">Sex</td>
@@ -15,9 +14,7 @@
     </thead>
     {% for parent in parents %}
     <tr>
-        <td><a href="{{ url_for('parentedit', id=parent.id) }}">edit</a></td>
-        <td><a href="{{ url_for('parentview', id=parent.id) }}">{{parent.name}}</a></td>
-
+        <td><a href="{{ url_for('config.parentview', id=parent.id) }}">{{parent.name}}</a></td>
         <td>{{parent.email}}</td>
         <td>{{sex[parent.sex]}}</td>
         <td>{{parent.dob.strftime('%m-%d-%Y')}}</td>
@@ -28,7 +25,7 @@
 
 </table>
 <hr>
-<td><a href="{{ url_for('parentadd') }}">add</a></td>
+<td><a href="{{ url_for('config.parentadd') }}">add</a></td>
 <p>
     {% if prev_url %}
         <a href="{{ prev_url }}">prev</a>

@@ -25,14 +25,15 @@
     <body>
         <div>
             <div style="float:left;">
-                <a href="{{ url_for('parents') }}" style="text-decoration: none; font-size:32px;">c4h</a>
+                <a href="{{ url_for('index') }}" style="text-decoration: none; font-size:32px;">c4h</a>
             </div>
             <div style="float:right;">
-                <a href="{{ url_for('parents') }}">home</a> |
-                <a href="{{ url_for('parents') }}">envs</a> |
-                <a href="{{ url_for('parents') }}">apps</a> |
-                <a href="{{ url_for('parents') }}">login</a>
-
+                <a href="{{ url_for('index') }}">home</a> |
+                {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('auth.login') }}">login</a>
+                {% else %}
+                    <a href="{{ url_for('auth.logout') }}">logout</a>
+                {% endif %}
             </div>
         </div>
         <br>

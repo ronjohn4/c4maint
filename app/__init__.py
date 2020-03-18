@@ -5,9 +5,16 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 from config import Config
+from flask_login import LoginManager
+from flask_bootstrap import Bootstrap
+
 
 db = SQLAlchemy()
 migrate = Migrate()
+login = LoginManager()
+login.login_view = 'templates.login'
+login.login_message = 'Please log in to access this page.'
+bootstrap = Bootstrap()
 
 
 def create_app(config_class=Config):
@@ -17,6 +24,14 @@ def create_app(config_class=Config):
 
     db.init_app(app)
     migrate.init_app(app, db)
+    login.init_app(app)
+    bootstrap.init_app(app)
+
+    from app.auth import bp as auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth', template_folder='/auth/templates')
+
+    from app.config import bp as config_bp
+    app.register_blueprint(config_bp, url_prefix='/config', template_folder='/config/templates')
 
     if app.config['LOG_TO_STDOUT']:
         stream_handler = logging.StreamHandler()
@@ -35,10 +50,14 @@ def create_app(config_class=Config):
     app.logger.setLevel(logging.INFO)
     app.logger.info('c4maint startup')
 
+    app.config['EXPLAIN_TEMPLATE_LOADING'] = True
+    print(f"root_path={app.root_path}")
+
     return app
 
 
 app = create_app()
 
 
-from app import models, routes
+from app import models
+from app.main import routes

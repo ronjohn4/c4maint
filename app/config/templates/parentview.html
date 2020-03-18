@@ -30,16 +30,15 @@
     </tr>
 </table>
 <hr>
-<a href="{{ url_for('parents') }}">cancel</a> | <a href="{{ url_for('parentedit', id=parent.id) }}">edit</a>
+<a href="{{ url_for('config.parents') }}">cancel</a> | <a href="{{ url_for('config.parentedit', id=parent.id) }}">edit</a>
 {% if not children %}
- | <a href="{{ url_for('parentedit', id=parent.id) }}">delete</a>
+ | <a href="{{ url_for('config.parentedit', id=parent.id) }}">delete</a>
 {% endif %}
 <hr>
 <h2>Audit List</h2>
 {% if children %}
     <table>
         <thead>
-            <td></td>
             <td class="underline">Date/Time</td>
             <td class="underline">User</td>
             <td class="underline">Action</td>
@@ -48,8 +47,8 @@
         </thead>
         {% for child in children %}
             <tr>
-                <td><a href="{{ url_for('parentview', id=child.id) }}">view</a></td>
-                <td>{{child.a_datetime.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+                <td><a href="{{ url_for('config.parentview', id=child.id) }}">
+                    {{child.a_datetime.strftime('%Y-%m-%d %H:%M:%S')}}</a></td>
                 <td>{{child.a_user}}</td>
                 <td>{{child.action}}</td>
                 <td>{{child.before|truncate(40)}}</td>
