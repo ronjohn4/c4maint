@@ -13,9 +13,16 @@
 {% endmacro %}
 
 {% block content %}
-<h2>Parent Add</h2>
+<script type="text/javascript">
+    function submitAddform()
+    {
+        document.AddForm.submit();
+        return false;
+    }
+</script>
+<h2>KeyVal Add</h2>
 
-<form name="AddForm" method="POST" action="{{ url_for('parentadd') }}">
+<form name="AddForm" method="POST" action="{{ url_for('keyval.keyvaladd') }}">
     {{ form.csrf_token }}{{ form.hidden_tag() }}
     <p>{{ with_errors(form.name) }}</p>
     <p>{{ with_errors(form.email) }}</p>
@@ -25,5 +32,5 @@
     <p>{{ with_errors(form.income_amount) }}</p>
 </form>
 
-<p><a href="javascript:submitAddform()">save</a> | <a href="{{ url_for('parents') }}">cancel</a></p>
+<p><a href="javascript:submitAddform()">save</a> | <a href="{{ url_for('keyval.keyvallist') }}">cancel</a></p>
 {% endblock %}

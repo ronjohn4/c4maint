@@ -36,23 +36,38 @@ class Parent(db.Model):
     income_amount = db.Column(db.Numeric)
 
     def audit_format(self):
-        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns}).replace("'", '"')
 
     def __repr__(self):
         return '<Parent {}>'.format(self.name)
+
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "sex": self.sex,
+            "dob": self.dob,
+            "is_active": self.is_active,
+            "income_amount": self.income_amount
+        }
+        return data
 
 
 class ParentAudit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('parent.id'))
     a_datetime = db.Column(db.DateTime)
-    a_user = db.Column(db.String(64))
+    a_user_id = db.Column(db.Integer)
+    a_username = db.Column(db.String(64))
     action = db.Column(db.String(64))
     before = db.Column(db.String)
     after = db.Column(db.String)
 
     def __repr__(self):
         return '<ParentAudit {}>'.format(self.datetime)
+
+
 
 
 class User(UserMixin, db.Model):

@@ -1,13 +1,8 @@
 from flask import render_template
-from app import app
+from app.main import bp
 
 
-lastpagefull = 0
-lastpagefilter = 0
-next_page = None
-
-
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/index', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')

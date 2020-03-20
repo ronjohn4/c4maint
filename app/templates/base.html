@@ -3,32 +3,18 @@
 <html>
     <head>
         {% if title %}
-        <title>{{ title }} - c4h</title>
+            <title>C4H - {{ title }}</title>
         {% else %}
-        <title>c4h</title>
+            <title>C4H</title>
         {% endif %}
-
-        <script type="text/javascript">
-            function submitAddform()
-            {
-                document.AddForm.submit();
-                return false;
-            }
-
-            function submitEditform()
-            {
-                document.EditForm.submit();
-                return false;
-            }
-        </script>
     </head>
     <body>
         <div>
             <div style="float:left;">
-                <a href="{{ url_for('index') }}" style="text-decoration: none; font-size:32px;">c4h</a>
+                <a href="{{ url_for('main.index') }}" style="text-decoration: none; font-size:32px;">C4H</a>
             </div>
             <div style="float:right;">
-                <a href="{{ url_for('index') }}">home</a> |
+                <a href="{{ url_for('main.index') }}">home</a> |
                 {% if current_user.is_anonymous %}
                     <a href="{{ url_for('auth.login') }}">login</a>
                 {% else %}
@@ -41,7 +27,7 @@
             {% if messages %}
                 <ul class="messaged-ul">
                     {% for message in messages %}
-                    <li class="messages-li">{{ message }}</li>
+                        <li class="messages-li">{{ message }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}

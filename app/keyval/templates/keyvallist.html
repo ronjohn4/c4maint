@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Parent List</h2>
+<h2>KeyVal List</h2>
 
 <table>
     <thead>
+        <td></td>
         <td class="underline">Name</td>
         <td class="underline">email</td>
         <td class="underline">Sex</td>
@@ -12,20 +13,21 @@
         <td class="underline">Active</td>
         <td class="underline">Income Amount</td>
     </thead>
-    {% for parent in parents %}
+    {% for keyval in keyvals %}
     <tr>
-        <td><a href="{{ url_for('config.parentview', id=parent.id) }}">{{parent.name}}</a></td>
-        <td>{{parent.email}}</td>
-        <td>{{sex[parent.sex]}}</td>
-        <td>{{parent.dob.strftime('%m-%d-%Y')}}</td>
-        <td>{{parent.is_active}}</td>
-        <td align="right">{{ "${:,.2f}".format(parent.income_amount|float) }}</td>
+        <td><a href="{{ url_for('keyval.keyvalview', id=keyval.id) }}">view</a></td>
+        <td>{{keyval.name}}</td>
+        <td>{{keyval.email}}</td>
+        <td>{{sex[keyval.sex]}}</td>
+        <td>{{keyval.dob.strftime('%m-%d-%Y')}}</td>
+        <td>{{keyval.is_active}}</td>
+        <td align="right">{{ "${:,.2f}".format(keyval.income_amount|float) }}</td>
     </tr>
     {% endfor %}
 
 </table>
 <hr>
-<td><a href="{{ url_for('config.parentadd') }}">add</a></td>
+<td><a href="{{ url_for('keyval.keyvaladd') }}">add</a></td>
 <p>
     {% if prev_url %}
         <a href="{{ prev_url }}">prev</a>

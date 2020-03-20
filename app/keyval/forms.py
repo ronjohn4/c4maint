@@ -13,7 +13,7 @@ def validate_dob(form, field):
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")
 
 
-class ParentForm(FlaskForm):
+class KeyvalForm(FlaskForm):
     id = HiddenField('id:')
     name = StringField('Name:', validators=[DataRequired()])
     email = StringField('Email:', validators=[DataRequired(), Email()])

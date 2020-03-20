@@ -1,58 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Parent View</h2>
+<h2>KeyVal View</h2>
 
 <table>
     <tr>
         <td align="right" style="font-weight:bold">name:</td>
-        <td>{{parent.name}}</td>
+        <td>{{keyval.name}}</td>
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">Email:</td>
-        <td>{{parent.email}}</td>
+        <td>{{keyval.email}}</td>
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">sex:</td>
-        <td>{{sex[parent.sex]}}</td>
+        <td>{{sex[keyval.sex]}}</td>
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">DOB:</td>
-        <td>{{parent.dob.strftime('%m-%d-%Y')}}</td>
+        <td>{{keyval.dob.strftime('%m-%d-%Y')}}</td>
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">active:</td>
-        <td>{{parent.is_active}}</td>
+        <td>{{keyval.is_active}}</td>
     </tr>
     <tr>
         <td align="right" style="font-weight:bold">Income Amount:</td>
-        <td>{{"${:,.2f}".format(parent.income_amount|float)}}</td>
+        <td>{{"${:,.2f}".format(keyval.income_amount|float)}}</td>
     </tr>
 </table>
 <hr>
-<a href="{{ url_for('config.parents') }}">cancel</a> | <a href="{{ url_for('config.parentedit', id=parent.id) }}">edit</a>
-{% if not children %}
- | <a href="{{ url_for('config.parentedit', id=parent.id) }}">delete</a>
+<a href="{{ url_for('keyval.keyvallist') }}">back</a> | <a href="{{ url_for('keyval.keyvaledit', id=keyval.id) }}">edit</a>
+{% if auditlist %}
+ | <span title="only available if no related data">delete</span>
+{% else %}
+ | <a href="{{ url_for('keyval.keyvaldelete', id=keyval.id) }}">delete</a>
 {% endif %}
 <hr>
 <h2>Audit List</h2>
-{% if children %}
+{% if auditlist %}
     <table>
         <thead>
+            <td></td>
             <td class="underline">Date/Time</td>
             <td class="underline">User</td>
             <td class="underline">Action</td>
             <td class="underline">Before</td>
             <td class="underline">After</td>
         </thead>
-        {% for child in children %}
+        {% for audit in auditlist %}
             <tr>
-                <td><a href="{{ url_for('config.parentview', id=child.id) }}">
-                    {{child.a_datetime.strftime('%Y-%m-%d %H:%M:%S')}}</a></td>
-                <td>{{child.a_user}}</td>
-                <td>{{child.action}}</td>
-                <td>{{child.before|truncate(40)}}</td>
-                <td>{{child.after|truncate(40)}}</td>
+                <td><a href="{{ url_for('keyval.auditview', id=audit.id) }}">view</a></td>
+                <td>{{audit.a_datetime.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+                <td>{{audit.a_user}}</td>
+                <td>{{audit.action}}</td>
+                <td>{{audit.before|truncate(40)}}</td>
+                <td>{{audit.after|truncate(40)}}</td>
             </tr>
         {% endfor %}
     </table>
