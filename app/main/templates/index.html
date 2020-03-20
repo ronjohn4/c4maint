@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Application Configuration</h2>
+Application Configuration allows application administrators direct access to the key/value pairs that control how applications operate.
+<p>
+<a href="{{ url_for('keyval.keyvallist') }}">KeyVal</a><p>
+<a href="{{ url_for('keyval.keyvallist') }}">envs</a><p>
+<a href="{{ url_for('keyval.keyvallist') }}">apps</a>
+</p>
+{% endblock %}
