@@ -7,7 +7,11 @@
                 {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
                 <td align="right" style="font-weight:bold">{{ field.label }}</td>
                 <td>{{ field(class=css_class, **kwargs) }}</td>
-                <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+                <ul class="errors">
+                    {% for error in field.errors %}
+                        <li>{{ error|e }}</li>
+                    {% endfor %}
+                </ul>
             {% else %}
                 <td align="right" style="font-weight:bold">{{ field.label }}</td>
                 <td>{{ field(**kwargs) }}</td>

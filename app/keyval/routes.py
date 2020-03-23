@@ -114,13 +114,6 @@ def keyvaldelete(id):
     return render_template('keyvallist.html', keyvals=keyvallist.items, sex=sex, next_url=next_url, prev_url=prev_url)
 
 
-@bp.route('/auditview/<int:id>', methods=["GET"])
-@login_required
-def auditview(id):
-    auditsingle = ParentAudit.query.filter_by(id=id).first_or_404()
-    return render_template('auditview.html', audit=auditsingle)
-
-
 # Use to add test data to the Parent model.
 # /keyval/keyvaladdtest?addcount=30 adds 30 entries
 # may need to remove the @login_required
@@ -136,28 +129,6 @@ def keyvaladdtest():
                      is_active=0,
                      income_amount=123.45
                      )
-        db.session.add(var)
-    db.session.commit()
-    return redirect('/list')
-
-
-# Use to add test data to the ParentAudit model.
-# /keyval/auditaddtest?addcount=30&parentid=3 adds 30 entries to parent 3
-# may need to remove the @login_required
-@bp.route('/auditaddtest/', methods=["GET", "POST"])
-@login_required
-def auditaddtest():
-    addcount = request.args.get('addcount', 20, type=int)
-    parentid = request.args.get('parentid', 1, type=int)
-    for addone in range(addcount):
-        var = ParentAudit(parent_id=parentid,
-                          a_datetime=datetime.now(),
-                          a_user_id=current_user.id,
-                          a_username=load_user(current_user.id).username,
-                          action="change",
-                          before="snapshot of parent before",
-                          after="snapshot of parent after"
-                    )
         db.session.add(var)
     db.session.commit()
     return redirect('/list')

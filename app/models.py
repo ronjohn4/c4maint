@@ -160,3 +160,40 @@ class User(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+
+class App(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    is_active = db.Column(db.Boolean)
+
+    def audit_format(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns}).replace("'", '"')
+
+    def __repr__(self):
+        return '<App {}>'.format(self.name)
+
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "name": self.name,
+            "is_active": self.is_active
+        }
+        return data
+
+
+class AppAudit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('app.id'))
+    a_datetime = db.Column(db.DateTime)
+    a_user_id = db.Column(db.Integer)
+    a_username = db.Column(db.String(64))
+    action = db.Column(db.String(64))
+    before = db.Column(db.String)
+    after = db.Column(db.String)
+
+    def __repr__(self):
+        return '<AppAudit {}>'.format(self.datetime)
+
+

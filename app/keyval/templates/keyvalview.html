@@ -50,7 +50,7 @@
         </thead>
         {% for audit in auditlist %}
             <tr>
-                <td><a href="{{ url_for('keyval.auditview', id=audit.id) }}">view</a></td>
+                <td><a href="{{ url_for('audit.auditview', id=audit.id) }}">view</a></td>
                 <td>{{audit.a_datetime.strftime('%Y-%m-%d %H:%M:%S')}}</td>
                 <td>{{audit.a_user}}</td>
                 <td>{{audit.action}}</td>

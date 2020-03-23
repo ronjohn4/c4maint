@@ -27,14 +27,22 @@ def create_app(config_class=Config):
     login.init_app(app)
     bootstrap.init_app(app)
 
+    from app.audit import bp as audit_bp
+    app.register_blueprint(audit_bp, url_prefix='/audit', template_folder='/audit/templates')
+
+
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth', template_folder='/auth/templates')
 
     from app.keyval import bp as keyval_bp
     app.register_blueprint(keyval_bp, url_prefix='/keyval', template_folder='/keyval/templates')
 
+    from app.app import bp as app_bp
+    app.register_blueprint(app_bp, url_prefix='/app', template_folder='/app/templates')
+
     from app.main import bp as main_bp
     app.register_blueprint(main_bp, url_prefix='/', template_folder='/main/templates')
+
 
     if app.config['LOG_TO_STDOUT']:
         stream_handler = logging.StreamHandler()
