@@ -12,6 +12,10 @@
         <td align="right" style="font-weight:bold">active:</td>
         <td>{{app.is_active}}</td>
     </tr>
+    <tr>
+        <td align="right" style="font-weight:bold">desc:</td>
+        <td>{{app.desc}}</td>
+    </tr>
 </table>
 <hr>
 <a href="{{ url_for('app.applist') }}">back</a> | <a href="{{ url_for('app.appedit', id=app.id) }}">edit</a>

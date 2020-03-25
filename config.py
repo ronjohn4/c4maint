@@ -9,6 +9,6 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT') or None
     ADMINS = ['your-email@example.com']
-    ROWS_PER_PAGE_FULL = 20
-    ROWS_PER_PAGE_FILTER = 10
+    ROWS_PER_PAGE_FULL = 10
+    ROWS_PER_PAGE_FILTER = 5
     TEMPLATES_AUTO_RELOAD = True

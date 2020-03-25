@@ -1,4 +1,4 @@
-
+{% extends "base.html" %}
 
 {% block content %}
 <h2>Audit View</h2>
@@ -30,5 +30,5 @@
     </tr>
 </table>
 <hr>
-<a href="{{ url_for({{rtn}}, id=audit.parent_id|int) }}">back</a>
+<a href="{{rtn}}">back</a>
 {% endblock %}

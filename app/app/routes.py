@@ -1,11 +1,11 @@
 from flask import render_template, redirect, url_for, request, current_app
+from flask_login import login_required, current_user
 from app import db
 from app.app import bp
-from app.models import App, ParentAudit
+from app.models import App, ParentAudit, load_user
 from app.app.forms import AppForm
 from datetime import datetime
-from app.models import load_user
-from flask_login import login_required, current_user
+
 
 
 lastpagefull = 0
@@ -64,6 +64,7 @@ def appedit(id):
         data = App.query.filter_by(id=id).first_or_404()
         before = str(data.to_dict())
         data.name = request.form['name']
+        data.desc = request.form['desc']
         data.is_active = 'is_active' in request.form
 
         after = str(data.to_dict())
@@ -112,8 +113,9 @@ def appaddtest():
     addcount = request.args.get('addcount', 20, type=int)
     for addone in range(addcount):
         var = App(name=f'name{addone}',
-                     is_active=0
-                     )
+                  desc=f'desc{addone}',
+                  is_active=0
+                  )
         db.session.add(var)
     db.session.commit()
     return redirect('/list')

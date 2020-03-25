@@ -1,12 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager
+from flask_bootstrap import Bootstrap
 import logging
 from logging.handlers import RotatingFileHandler
 import os
 from config import Config
-from flask_login import LoginManager
-from flask_bootstrap import Bootstrap
 
 
 db = SQLAlchemy()
@@ -40,9 +40,11 @@ def create_app(config_class=Config):
     from app.app import bp as app_bp
     app.register_blueprint(app_bp, url_prefix='/app', template_folder='/app/templates')
 
+    from app.env import bp as env_bp
+    app.register_blueprint(env_bp, url_prefix='/env', template_folder='/env/templates')
+
     from app.main import bp as main_bp
     app.register_blueprint(main_bp, url_prefix='/', template_folder='/main/templates')
-
 
     if app.config['LOG_TO_STDOUT']:
         stream_handler = logging.StreamHandler()

@@ -1,12 +1,12 @@
 from flask import render_template, redirect, url_for, request, current_app
+from flask_login import login_required, current_user
 from app import db
 from app.keyval import bp
-from app.models import Parent, ParentAudit
+from app.models import Parent, ParentAudit, sex, load_user
 from app.keyval.forms import KeyvalForm
 from datetime import datetime
 import dateutil.parser
-from app.models import sex, load_user
-from flask_login import login_required, current_user
+
 
 
 lastpagefull = 0

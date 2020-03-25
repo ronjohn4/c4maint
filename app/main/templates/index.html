@@ -2,13 +2,16 @@
 
 {% block content %}
 <h2>Application Configuration</h2>
-Application Configuration allows application administrators direct access to the key/value pairs that control how applications operate.
 <p>
-    <a href="{{ url_for('keyval.keyvallist') }}">KeyVal</a><p>
-    <a href="{{ url_for('keyval.keyvallist') }}">envs</a><p>
-    <a href="{{ url_for('app.applist') }}">apps</a><p>
+    Application Configuration allows application administrators direct access to the key/value pairs that control how applications operate.
+</p>
 <p>
-    <a href="audit/auditview">Audit direct</a>
-    <a href="{{ url_for('audit.auditview') }}">Audit via url_for</a><p>
+    <a href="{{ url_for('keyval.keyvallist') }}">KeyVal</a> is the table that stores the Key Value pairs that are read ad used by applications.  KeyVals are defined for each App/Env combination.
+</p>
+<p>
+    <a href="{{ url_for('env.envlist') }}">Envs</a> is short for Environments.  Our current environments are PRD, UAT1, UAT2, UAT3 and STG.
+</p>
+<p>
+    <a href="{{ url_for('app.applist') }}">Apps</a> is short for Applications.  Each application can have it's own set of Key Value pairs.
 </p>
 {% endblock %}

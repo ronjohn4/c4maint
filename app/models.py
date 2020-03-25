@@ -1,4 +1,6 @@
 # https://flask-migrate.readthedocs.io/
+# make sure db is not open in editor
+# make sure db is not in use by the app
 
 # one time creation of the migrations folder
 #   flask db init
@@ -9,11 +11,12 @@
 # execute the migration script
 #   flask db upgrade
 
+
+from flask import current_app, url_for
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
 from datetime import datetime, timedelta
-from flask import current_app, url_for
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
 from hashlib import md5
 import jwt
 from time import time
@@ -34,9 +37,6 @@ class Parent(db.Model):
     dob = db.Column(db.Date)
     is_active = db.Column(db.Boolean)
     income_amount = db.Column(db.Numeric)
-
-    def audit_format(self):
-        return str({c.name: getattr(self, c.name) for c in self.__table__.columns}).replace("'", '"')
 
     def __repr__(self):
         return '<Parent {}>'.format(self.name)
@@ -68,8 +68,6 @@ class ParentAudit(db.Model):
         return '<ParentAudit {}>'.format(self.datetime)
 
 
-
-
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -91,8 +89,7 @@ class User(UserMixin, db.Model):
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
@@ -103,8 +100,7 @@ class User(UserMixin, db.Model):
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, current_app.config['SECRET_KEY'],
-                            algorithms=['HS256'])['reset_password']
+            id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
         except:
             return
         return User.query.get(id)
@@ -162,14 +158,11 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-
 class App(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
+    desc = db.Column(db.String(128))
     is_active = db.Column(db.Boolean)
-
-    def audit_format(self):
-        return str({c.name: getattr(self, c.name) for c in self.__table__.columns}).replace("'", '"')
 
     def __repr__(self):
         return '<App {}>'.format(self.name)
@@ -178,22 +171,26 @@ class App(db.Model):
         data = {
             "id": self.id,
             "name": self.name,
+            "desc": self.desc,
             "is_active": self.is_active
         }
         return data
 
 
-class AppAudit(db.Model):
+class Env(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    parent_id = db.Column(db.Integer, db.ForeignKey('app.id'))
-    a_datetime = db.Column(db.DateTime)
-    a_user_id = db.Column(db.Integer)
-    a_username = db.Column(db.String(64))
-    action = db.Column(db.String(64))
-    before = db.Column(db.String)
-    after = db.Column(db.String)
+    name = db.Column(db.String(64))
+    desc = db.Column(db.String(128))
+    is_active = db.Column(db.Boolean)
 
     def __repr__(self):
-        return '<AppAudit {}>'.format(self.datetime)
+        return '<Env {}>'.format(self.name)
 
-
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "name": self.name,
+            "desc": self.desc,
+            "is_active": self.is_active
+        }
+        return data
