@@ -17,24 +17,23 @@
 {% endmacro %}
 
 {% block content %}
-<h2>Parent Edit - {{form.id.data}}</h2>
-
-<!--<form name="EditForm" method="POST">-->
-<form name="EditForm" method="POST" action="{{ url_for('parentedit', id=form.id|int) }}">
+<script>
+function submitEditform()
+    {
+        document.EditForm.submit();
+        return false;
+    }
+</script>
+<h2>App Edit</h2>
+<form name="EditForm" method="POST" action="{{ url_for('app.appedit', id=form.id.data|int) }}">
     {{ form.csrf_token }}{{ form.hidden_tag() }}
     <table>
-        <tr>
-            <td align="right" style="font-weight:bold">id:</td>
-            <td>{{form.id}}</td>
-        </tr>
         {{ with_errors(form.name) }}
-        {{ with_errors(form.email) }}
-        {{ with_errors(form.sex) }}
-        {{ with_errors(form.dob) }}
-        {{ with_errors(form.is_tobacco_user) }}
-        {{ with_errors(form.income_amount) }}
+        {{ with_errors(form.is_active) }}
+        {{ with_errors(form.desc) }}
     </table>
 </form>
 <hr>
-<p><a href="{{ url_for('parents') }}">cancel</a> | <a href="javascript:submitEditform()">save</a></p>
+<p><a href="{{ url_for('app.appview', id=form.id.data|int) }}">cancel</a> |
+    <a href="javascript:submitEditform()">save</a></p>
 {% endblock %}

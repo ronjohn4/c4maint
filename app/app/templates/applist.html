@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>App List</h2>
+
+<table>
+    <thead>
+        <td></td>
+        <td class="underline">Name</td>
+        <td class="underline">Active</td>
+        <td class="underline">Desc</td>
+    </thead>
+    {% for app in apps %}
+    <tr>
+        <td><a href="{{ url_for('app.appview', id=app.id) }}">view</a></td>
+        <td>{{app.name}}</td>
+        <td>{{app.is_active}}</td>
+        <td>{{app.desc}}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+<hr>
+<td><a href="{{ url_for('app.appadd') }}">add</a></td>
+<p>
+    {% if prev_url %}
+        <a href="{{ prev_url }}">prev</a>
+    {% else %}
+        prev
+    {% endif %}
+    |
+    {% if next_url %}
+        <a href="{{ next_url }}">next</a>
+    {% else %}
+        next
+    {% endif %}
+</p>
+{% endblock %}

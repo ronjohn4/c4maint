@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Env List</h2>
+
+<table>
+    <thead>
+        <td></td>
+        <td class="underline">Name</td>
+        <td class="underline">Active</td>
+        <td class="underline">Desc</td>
+    </thead>
+    {% for env in envs %}
+    <tr>
+        <td><a href="{{ url_for('env.envview', id=env.id) }}">view</a></td>
+        <td>{{env.name}}</td>
+        <td>{{env.is_active}}</td>
+        <td>{{env.desc}}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+<hr>
+<td><a href="{{ url_for('env.envadd') }}">add</a></td>
+<p>
+    {% if prev_url %}
+        <a href="{{ prev_url }}">prev</a>
+    {% else %}
+        prev
+    {% endif %}
+    |
+    {% if next_url %}
+        <a href="{{ next_url }}">next</a>
+    {% else %}
+        next
+    {% endif %}
+</p>
+{% endblock %}
